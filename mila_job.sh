@@ -1,5 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=SocialSimPIIRemoval
+#SBATCH --output=../output.txt
 #SBATCH --time=10:00:00
 #SBATCH --mem-per-cpu=100G
 #SBATCH --ntasks-per-node=1
