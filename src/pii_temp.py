@@ -1,6 +1,7 @@
 import json
 import os
 import hashlib
+from pathlib import Path
 from presidio_analyzer.recognizer_registry.recognizer_registry import RecognizerRegistry
 from presidio_analyzer.recognizer_result import RecognizerResult
 from presidio_anonymizer import BatchAnonymizerEngine
@@ -84,6 +85,14 @@ if __name__ == "__main__":
     logger.info("Loading configuration...")
     with open("conf.json", "r") as config:
         params = json.load(config)
+
+    # Use environment variables for paths if they exist
+    temp_data_dir = os.environ.get('TEMP_DATA')
+    if temp_data_dir:
+        temp_data_path = Path(temp_data_dir)
+        params["file_name"] = str(temp_data_path / "merged_messages.parquet")
+        params["experiment_name"] = str(temp_data_path)
+        logger.info(f"Overriding paths from TEMP_DATA: {temp_data_dir}")
 
     # Read File
     logger.info("Reading and processing input file...")

@@ -15,8 +15,11 @@ from tqdm import tqdm
 import os
 from dotenv import load_dotenv
 
-INPUT_FILE = Path(__file__).parent / "full_data" / "single_cluster.jsonl"
-HOME_DIR = Path.home()
+# Use environment variables for paths if they exist
+temp_data_dir = Path(os.environ.get('TEMP_DATA', Path(__file__).parent / "full_data"))
+INPUT_FILE = temp_data_dir / "single_cluster.jsonl"
+INPUT_BASE = Path(os.environ.get('INPUT_DATA', Path.home()))
+OUTPUT_BASE = Path(os.environ.get('OUTPUT_DATA', Path.home() / "cleaned"))
 
 # Load environment variables from .env file
 dotenv_path = Path(__file__).parent / ".env"
@@ -46,8 +49,8 @@ def process_folder(folder_path: str):
     """Process a folder, reading user clusters and writing chains to appropriate files."""
     path = Path(folder_path)
     folder_name = path.name
-    # Output directly to the specified folder in home directory
-    output_dir = Path(HOME_DIR / "cleaned" / folder_name)
+    # Output directly to the specified folder
+    output_dir = OUTPUT_BASE / folder_name
 
     # Remove existing files if the directory exists
     if output_dir.exists():
@@ -118,13 +121,12 @@ def process_folder(folder_path: str):
 
 
 def main():
-    # Hardcoded list of folders to process (absolute paths from home directory)
-    folders = [
-        str(HOME_DIR / "processed_2_clusters"),
-        str(HOME_DIR / "processed_25_clusters"),
-        str(HOME_DIR / "processed_100_clusters"),
-        str(HOME_DIR / "processed_1000_clusters"),
-    ]
+    # Use INPUT_BASE to find processed_* folders
+    folders = [str(f) for f in INPUT_BASE.glob("processed_*_clusters") if f.is_dir()]
+
+    if not folders:
+        print(f"No folders matching processed_*_clusters found in {INPUT_BASE}")
+        return
 
     for folder in folders:
         process_folder(folder)

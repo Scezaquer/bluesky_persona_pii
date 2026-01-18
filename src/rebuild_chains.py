@@ -17,10 +17,13 @@ import pandas as pd
 import json
 from pathlib import Path
 from tqdm import tqdm
+import os
 
-INPUT_FILE = Path(__file__).parent / "full_data" / "pii_dataset_tags.parquet"
-OUTPUT_FILE = Path(__file__).parent / "full_data" / "single_cluster.jsonl"
-DID_LIST_FILE: Path = Path(__file__).parent / "src" / "data_removal" / "did_removal_list.txt"
+# Use environment variables for paths if they exist
+temp_data_dir = Path(os.environ.get('TEMP_DATA', Path(__file__).parent / "full_data"))
+INPUT_FILE = temp_data_dir / "pii_dataset_tags.parquet"
+OUTPUT_FILE = temp_data_dir / "single_cluster.jsonl"
+DID_LIST_FILE: Path = Path(__file__).parent / "data_removal" / "did_removal_list.txt"
 
 # Columns: anonymized_user_id,relative_integer_time,chain_id,actions,scrubbed_output
 
@@ -29,7 +32,7 @@ def write_chain(fout: TextIOWrapper, chain: list[Dict[str, Any]]):
     # make sure the chain is sorted by original time
     chain = sorted(chain, key=lambda message: message["original_order"])
     # skip chain if user requested to be deleted
-    if chain[-1]["user_did"] in PROTECTED_DIDS:
+    if chain[-1]["user_id"] in PROTECTED_DIDS:
         return
     # delete the key
     for message in chain:

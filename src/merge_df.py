@@ -13,6 +13,7 @@ from typing import List, Dict, Any
 import json
 import pandas as pd
 from pathlib import Path
+import os
 
 def load_and_process_jsonl(file_path: Path, chain_id_start: int) -> tuple[int, List[Dict[str, Any]]]:
     messages: List[Dict[str, Any]] = []
@@ -35,9 +36,11 @@ def load_and_process_jsonl(file_path: Path, chain_id_start: int) -> tuple[int, L
     return num_chains, messages
 
 def main() -> None:
-    # Get all jsonl files in the processed_25_clusters directory
-    input_dir: Path = Path.home() / 'processed_25_clusters'
-    output_dir: Path = Path.home() / 'all_messages'
+    # Get all jsonl files in all processed_*_clusters directories
+    input_base = Path(os.environ.get('INPUT_DATA', Path.home()))
+    
+    output_base = Path(os.environ.get('TEMP_DATA', Path.home() / 'all_messages'))
+    output_dir: Path = output_base
     
     # Create output directory if it doesn't exist
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -45,8 +48,8 @@ def main() -> None:
     all_messages: List[Dict[str, Any]] = []
     chain_id_counter: int = 0
     
-    # Process each jsonl file
-    for file_path in input_dir.glob('*.jsonl'):
+    # Process each jsonl file from all processed folders
+    for file_path in input_base.glob('processed_*_clusters/*.jsonl'):
         num_chains, messages = load_and_process_jsonl(file_path, chain_id_counter)
         all_messages.extend(messages)
         chain_id_counter += num_chains
