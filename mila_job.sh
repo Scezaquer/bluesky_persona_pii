@@ -1,10 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=SocialSimPIIRemoval
 #SBATCH --output=../output.txt
-#SBATCH --time=10:00:00
-#SBATCH --mem-per-cpu=100G
+#SBATCH --time=12:00:00
+#SBATCH --mem-per-cpu=64G
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=10
+#SBATCH --cpus-per-task=8
+#SBATCH --partition=main-cpu
 
 module load python/3.10
 

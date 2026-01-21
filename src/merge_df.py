@@ -65,7 +65,7 @@ def main() -> None:
     df: pd.DataFrame = pd.DataFrame(all_messages)
     
     # Ensure correct column types
-    df['user_did'] = df['user_did'].astype(str)
+    df['user_id'] = df['user_id'].astype(str)
     df['unix_epoch'] = df['unix_epoch'].astype(int)
     df['chain_id'] = df['chain_id'].astype(int)
     
