@@ -2,7 +2,7 @@
 #SBATCH --job-name=SocialSimPIIRemoval
 #SBATCH --output=../output.txt
 #SBATCH --time=12:00:00
-#SBATCH --mem-per-cpu=64G
+#SBATCH --mem=64G
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
 #SBATCH --partition=main-cpu
