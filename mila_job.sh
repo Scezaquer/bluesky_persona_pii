@@ -9,12 +9,13 @@
 module load python/3.10
 
 # Adjust this to your environment
-source ~/ENV/bin/activate
-cd ~/SM-based-personas/bluesky_persona_pii/src
+source $HOME/ENV/bin/activate
+export HF_HUB_CACHE=$SCRATCH/HF-cache
+cd $HOME/SM-based-personas/bluesky_persona_pii/src
 
 # Set directories
 export INPUT_DATA="${SCRATCH}/processed-data"
-export TEMP_DATA="${SCRATCH}/temp_pii"
+export TEMP_DATA="${SLURM_TMPDIR}/temp_pii"
 export OUTPUT_DATA="${SCRATCH}/cleaned"
 
 # Create directories
