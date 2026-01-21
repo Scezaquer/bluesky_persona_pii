@@ -25,7 +25,7 @@ def load_and_process_jsonl(file_path: Path, chain_id_start: int) -> tuple[int, L
             for message in chain:
                 # Create a row with either text or actions
                 row: Dict[str, Any] = {
-                    'user_id': message['user_did'],
+                    'user_id': message['user_id'],
                     'unix_epoch': message['unix_epoch'],
                     'chain_id': chain_idx,
                     'text': message.get('text', ''),
@@ -65,7 +65,7 @@ def main() -> None:
     df: pd.DataFrame = pd.DataFrame(all_messages)
     
     # Ensure correct column types
-    df['user_id'] = df['user_id'].astype(str)
+    df['user_did'] = df['user_did'].astype(str)
     df['unix_epoch'] = df['unix_epoch'].astype(int)
     df['chain_id'] = df['chain_id'].astype(int)
     
