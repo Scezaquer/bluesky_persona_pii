@@ -25,7 +25,7 @@ def load_and_process_jsonl(file_path: Path, chain_id_start: int) -> tuple[int, L
             for message in chain:
                 # Create a row with either text or actions
                 row: Dict[str, Any] = {
-                    'user_id': message['user_id'],
+                    'user_id': message['user_did'],
                     'unix_epoch': message['unix_epoch'],
                     'chain_id': chain_idx,
                     'text': message.get('text', ''),
